@@ -9,6 +9,39 @@
       href = "styles.css"/>
   </head>
   <body id="bg">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="jsmpeg.min.js"></script>
+    <script type="text/javascript">
+
+      function httpGetAsync(url, callback) {
+          var xmlHttp = new XMLHttpRequest();
+          xmlHttp.onreadystatechange = function() { 
+              if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
+                callback(xmlHttp.responseText);
+          }
+          xmlHttp.open("GET", url, true); // true for asynchronous 
+          xmlHttp.send(null);
+      }
+
+      function processM3U8(data) {
+          var results = data.trim().split("\n");
+          result = 'https://s52.ipcamlive.com/streams/345ef0477c421b817/' + results[results.length - 1];
+          console.log(result);
+          httpGetAsync(result, processTS);
+          //var player = new JSMpeg.Player(result, {loop: true});
+          //$("#hack").append("<div class='jsmpeg' data-url=" + result + "></div>");
+      }
+
+      function processTS(data) {
+          console.log(data);
+      }
+
+      httpGetAsync("https://s52.ipcamlive.com/streams/345ef0477c421b817/stream.m3u8", processM3U8);
+    </script>
+
+    <div class='jsmpeg' data-url="stream.ts"></div>
+
     <div id="content">
       <br>
       <div id="title">
@@ -87,14 +120,6 @@
             scrolling="no">
           </iframe>
         </div>
-        <div class="embed-box">
-          <a href="https://oceancitylive.com/ocean-city-webcams/castle-in-the-sand/">
-            <img
-              src="https://s19.ipcamlive.com/streams/135d1daa743fc4cf0/snapshot.jpg"
-              class="camera">
-            </img>
-          </a>
-        </div>
       </div>
       <div class="container">
         <div id="heading">54th Street</div>
@@ -109,13 +134,8 @@
       </div>      
       <div class="container">
         <div id="heading">91st Street</div>
-        <div class="embed-box short">
-          <a href="https://oceancitylive.com/ocean-city-webcams/princess-royale/">
-            <img
-              src="https://s45.ipcamlive.com/streams/2d5d0b2cbab5c44a4/snapshot.jpg"
-              class="camera">
-            </img>
-          </a>
+        <div class="embed-box short" id="hack">
+          
         </div>
       </div>
       <div class="container">
